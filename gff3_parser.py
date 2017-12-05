@@ -14,10 +14,6 @@ from collections import namedtuple
 import gzip
 import urllib.request, urllib.parse, urllib.error
 
-__author__  = "Chanaka Mannapperuma"
-__license__ = "MIT License"
-__version__ = "1.1"
-
 #Initialized GeneInfo named tuple. Note: namedtuple is immutable
 gffInfoFields = ["seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes"]
 GFFRecord = namedtuple("GFFRecord", gffInfoFields)
