@@ -62,7 +62,8 @@ CREATE TABLE `gene_info` (
   `gene_start` int(16) unsigned NOT NULL,
   `gene_end` int(16) unsigned NOT NULL,
   `description` varchar(255) DEFAULT '',
-  `gene_i` mediumint(20) NOT NULL,
+  `gene_i` mediumint(20) NOT NULL AUTO_INCREMENT,
+ PRIMARY KEY (`gene_id`,`gene_i`),
   KEY `gene_id` (`gene_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
