@@ -45,227 +45,179 @@ CREATE TABLE expression_datasetX (
     CONSTRAINT expression_datasetX_pk PRIMARY KEY (sample_i,gene_i)
 ) ENGINE MyISAM CHARACTER SET latin1;
 
--- Table: gene_go
-CREATE TABLE gene_go (
-    go_i int(11) NOT NULL,
-    gene_i int(11) NOT NULL,
-    gene_info_gene_i int(11) NOT NULL,
-    go_info_go_i int(11) NOT NULL,
-    CONSTRAINT gene_go_pk PRIMARY KEY (go_i,gene_i)
-) ENGINE MyISAM CHARACTER SET latin1;
+-- ----------------------------
+--  Table structure for `defaultgenebaskets`
+-- ----------------------------
+DROP TABLE IF EXISTS `defaultgenebaskets`;
+CREATE TABLE `defaultgenebaskets` (
+  `gene_basket_id` int(10) NOT NULL,
+  `ip` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE INDEX gene_i ON gene_go (gene_i);
+-- ----------------------------
+--  Table structure for `gene_atg`
+-- ----------------------------
+DROP TABLE IF EXISTS `gene_atg`;
+CREATE TABLE `gene_atg` (
+  `gene_id` varchar(255) NOT NULL,
+  `atg_description` varchar(255) DEFAULT NULL,
+  `atg_id` varchar(24) NOT NULL,
+  `gene_i` mediumint(11) unsigned NOT NULL,
+  PRIMARY KEY (`gene_i`,`gene_id`),
+  KEY `transcript_id` (`gene_id`),
+  KEY `atg_id` (`atg_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
--- Table: gene_info
-CREATE TABLE gene_info (
-    gene_i int(11) NOT NULL,
-    gene_id varchar(60) CHARACTER SET utf8 NULL DEFAULT '',
-    description varchar(255) NOT NULL DEFAULT '""',
-    synonyms varchar(255) NOT NULL DEFAULT '',
-    has_exp tinyint(1) NOT NULL DEFAULT '0',
-    cluster varchar(1) NOT NULL DEFAULT '',
-    at_desc varchar(255) NULL DEFAULT '',
-    at_ortholog varchar(15) NULL DEFAULT '',
-    at_syn varchar(255) NULL DEFAULT '',
-    degree smallint(5) NULL DEFAULT '0',
-    btw_rank smallint(5) NULL DEFAULT '0',
-    close_rank smallint(5) NULL DEFAULT '0',
-    avg_neigh_deg float NULL DEFAULT '0',
-    CONSTRAINT gene_info_pk PRIMARY KEY (gene_i)
-) ENGINE MyISAM CHARACTER SET latin1;
+-- ----------------------------
+--  Table structure for `gene_go`
+-- ----------------------------
+DROP TABLE IF EXISTS `gene_go`;
+CREATE TABLE `gene_go` (
+  `gene_id` varchar(255) NOT NULL,
+  `go_description` varchar(255) DEFAULT NULL,
+  `go_id` varchar(24) NOT NULL,
+  `gene_i` mediumint(11) unsigned NOT NULL,
+  PRIMARY KEY (`gene_i`,`gene_id`),
+  KEY `atg_id` (`go_id`),
+  KEY `transcript_id` (`gene_i`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
-CREATE INDEX gene_id ON gene_info (gene_id);
+-- ----------------------------
+--  Table structure for `gene_info`
+-- ----------------------------
+DROP TABLE IF EXISTS `gene_info`;
+CREATE TABLE `gene_info` (
+  `gene_id` varchar(60) NOT NULL,
+  `chromosome_name` varchar(16) NOT NULL,
+  `gene_start` int(16) unsigned NOT NULL,
+  `gene_end` int(16) unsigned NOT NULL,
+  `description` varchar(255) DEFAULT '',
+  `gene_i` mediumint(20) NOT NULL,
+  KEY `gene_id` (`gene_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- Table: go_info
-CREATE TABLE go_info (
-    go_i int(11) NOT NULL AUTO_INCREMENT,
-    go_id varchar(255) NULL DEFAULT NULL,
-    name_space varchar(255) NULL DEFAULT 'unknown',
-    description varchar(255) NULL DEFAULT NULL,
-    CONSTRAINT go_info_pk PRIMARY KEY (go_i)
-) ENGINE MyISAM;
+-- ----------------------------
+--  Table structure for `gene_kegg`
+-- ----------------------------
+DROP TABLE IF EXISTS `gene_kegg`;
+CREATE TABLE `gene_kegg` (
+  `gene_id` varchar(255) NOT NULL,
+  `kegg_description` varchar(255) DEFAULT NULL,
+  `kegg_id` varchar(24) NOT NULL,
+  `gene_i` mediumint(11) unsigned NOT NULL,
+  PRIMARY KEY (`gene_i`,`gene_id`),
+  KEY `transcript_id` (`gene_id`),
+  KEY `atg_id` (`kegg_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
--- Table: go_relation
-CREATE TABLE go_relation (
-    go_c int(11) NOT NULL,
-    go_p int(11) NOT NULL,
-    gene_go_go_i int(11) NOT NULL,
-    gene_go_gene_i int(11) NOT NULL,
-    CONSTRAINT go_relation_pk PRIMARY KEY (go_c,go_p)
-) ENGINE MyISAM CHARACTER SET latin1;
+-- ----------------------------
+--  Table structure for `gene_pfam`
+-- ----------------------------
+DROP TABLE IF EXISTS `gene_pfam`;
+CREATE TABLE `gene_pfam` (
+  `gene_id` varchar(255) NOT NULL,
+  `pfam_description` varchar(255) DEFAULT NULL,
+  `pfam_id` varchar(24) NOT NULL,
+  `gene_i` mediumint(11) unsigned NOT NULL,
+  PRIMARY KEY (`gene_id`,`gene_i`),
+  KEY `atg_id` (`pfam_id`),
+  KEY `transcript_id` (`gene_i`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
-CREATE INDEX go_p ON go_relation (go_p);
+-- ----------------------------
+--  Table structure for `genebaskets`
+-- ----------------------------
+DROP TABLE IF EXISTS `genebaskets`;
+CREATE TABLE `genebaskets` (
+  `gene_basket_id` int(10) NOT NULL AUTO_INCREMENT,
+  `gene_basket_name` varchar(100) COLLATE latin1_general_ci NOT NULL,
+  `harga` bigint(16) NOT NULL,
+  `genelist` mediumtext COLLATE latin1_general_ci,
+  `ip` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`gene_basket_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
--- Table: pfam_table
-CREATE TABLE pfam_table (
-    gene_i int(11) NULL DEFAULT NULL,
-    pfam_i int(11) NOT NULL AUTO_INCREMENT,
-    pfam_id varchar(60) NULL DEFAULT NULL,
-    description varchar(255) NULL DEFAULT NULL,
-    gene_info_gene_i int(11) NOT NULL,
-    CONSTRAINT pfam_table_pk PRIMARY KEY (pfam_i)
-) ENGINE MyISAM CHARACTER SET latin1;
+-- ----------------------------
+--  Table structure for `sequence_color`
+-- ----------------------------
+DROP TABLE IF EXISTS `sequence_color`;
+CREATE TABLE `sequence_color` (
+  `id` varchar(255) DEFAULT NULL,
+  `scaffold` varchar(255) DEFAULT NULL,
+  `feature` varchar(255) DEFAULT NULL,
+  `start_point` varchar(255) DEFAULT NULL,
+  `end_point` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- Table: sample_datasetX
-CREATE TABLE sample_datasetX (
-    sample_i int(11) NOT NULL,
-    sample_id varchar(60) NOT NULL,
-    exp_i int(11) NULL DEFAULT NULL,
-    title varchar(255) NOT NULL DEFAULT '',
-    last_update varchar(60) NOT NULL DEFAULT '',
-    type varchar(255) NOT NULL DEFAULT '',
-    source_name varchar(255) NULL DEFAULT NULL,
-    organism varchar(255) NULL DEFAULT '',
-    characteristics varchar(255) NULL DEFAULT NULL,
-    treatment_protocol varchar(255) NULL,
-    growth_protocol varchar(255) NULL,
-    molecule varchar(255) NULL DEFAULT NULL,
-    extract_protocol varchar(255) NULL,
-    lable varchar(255) NULL DEFAULT NULL,
-    lable_protocol varchar(255) NULL,
-    hyb_protocol varchar(255) NULL,
-    description varchar(255) NULL,
-    contact varchar(255) NULL DEFAULT NULL,
-    supplementary_file varchar(255) NULL,
-    exp_id varchar(200) NULL DEFAULT '',
-    experiment_datasetX_exp_i int(11) NOT NULL,
-    CONSTRAINT sample_datasetX_pk PRIMARY KEY (sample_i)
-) ENGINE MyISAM CHARACTER SET latin1;
+-- ----------------------------
+--  Table structure for `share_table`
+-- ----------------------------
+DROP TABLE IF EXISTS `share_table`;
+CREATE TABLE `share_table` (
+  `gene_basket_id` int(10) NOT NULL AUTO_INCREMENT,
+  `gene_basket_name` varchar(100) COLLATE latin1_general_ci NOT NULL,
+  `harga` bigint(16) NOT NULL,
+  `genelist` mediumtext COLLATE latin1_general_ci,
+  `ip` varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  `time` timestamp NULL DEFAULT NULL,
+  `randid` varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  PRIMARY KEY (`gene_basket_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-CREATE INDEX fk_Sample_PO1 ON sample_datasetX (last_update);
+-- ----------------------------
+--  Table structure for `transcript_atg`
+-- ----------------------------
+DROP TABLE IF EXISTS `transcript_atg`;
+CREATE TABLE `transcript_atg` (
+  `transcript_id` varchar(255) NOT NULL,
+  `atg_id` varchar(24) NOT NULL,
+  `transcript_i` mediumint(11) unsigned NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`transcript_i`,`transcript_id`),
+  KEY `transcript_id` (`transcript_id`),
+  KEY `atg_id` (`atg_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
-CREATE INDEX fk_Sample_ENVO1 ON sample_datasetX (type);
+-- ----------------------------
+--  Table structure for `transcript_info`
+-- ----------------------------
+DROP TABLE IF EXISTS `transcript_info`;
+CREATE TABLE `transcript_info` (
+  `transcript_id` varchar(255) NOT NULL DEFAULT '',
+  `gene_id` varchar(60) NOT NULL,
+  `description` varchar(255) DEFAULT '',
+  `chromosome_name` varchar(16) NOT NULL,
+  `strand` varchar(2) NOT NULL,
+  `gene_start` int(16) unsigned NOT NULL,
+  `gene_end` int(16) unsigned NOT NULL,
+  `pac_id` varchar(20) DEFAULT NULL,
+  `peptide_name` varchar(50) DEFAULT NULL,
+  `transcript_start` int(16) unsigned NOT NULL,
+  `transcript_end` int(16) unsigned NOT NULL,
+  `transcript_i` mediumint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `gene_i` mediumint(20) DEFAULT NULL,
+  PRIMARY KEY (`transcript_i`,`transcript_id`),
+  KEY `transcript_id` (`transcript_id`),
+  KEY `transcript_i` (`transcript_i`)
+) ENGINE=MyISAM AUTO_INCREMENT=20451 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
-CREATE INDEX fk_Sample_Experiment1 ON sample_datasetX (title);
+-- ----------------------------
+--  Table structure for `transcript_potri`
+-- ----------------------------
+DROP TABLE IF EXISTS `transcript_potri`;
+CREATE TABLE `transcript_potri` (
+  `transcript_id` varchar(255) NOT NULL,
+  `potri_id` varchar(24) NOT NULL,
+  `transcript_i` mediumint(11) unsigned NOT NULL,
+  PRIMARY KEY (`transcript_i`,`transcript_id`),
+  KEY `transcript_id` (`transcript_id`),
+  KEY `potri_id` (`potri_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
-CREATE INDEX exp_i ON sample_datasetX (exp_i);
+SET FOREIGN_KEY_CHECKS = 1;
 
-CREATE INDEX sample_i ON sample_datasetX (sample_i);
-
--- Table: tf
-CREATE TABLE tf (
-    TF_family_i int(11) NOT NULL,
-    gene_i int(11) NOT NULL,
-    transcript_i int(11) NULL DEFAULT NULL,
-    gene_info_gene_i int(11) NOT NULL,
-    CONSTRAINT tf_pk PRIMARY KEY (TF_family_i,gene_i)
-) ENGINE MyISAM CHARACTER SET latin1;
-
-CREATE INDEX fk_TF_GeneTable1 ON tf (gene_i);
-
-CREATE INDEX transcript_i ON tf (transcript_i);
-
--- Table: tf_family
-CREATE TABLE tf_family (
-    tf_family_i int(11) NOT NULL,
-    tf_family_id varchar(255) NULL DEFAULT NULL,
-    tf_TF_family_i int(11) NOT NULL,
-    tf_gene_i int(11) NOT NULL,
-    CONSTRAINT tf_family_pk PRIMARY KEY (tf_family_i)
-) ENGINE MyISAM CHARACTER SET latin1;
-
-CREATE INDEX transcript_i ON tf_family (tf_family_id);
-
--- Table: tf_set
-CREATE TABLE tf_set (
-    TF_dbi int(11) NOT NULL AUTO_INCREMENT,
-    TF_desciption varchar(255) NULL DEFAULT NULL,
-    TF_link varchar(60) NULL DEFAULT NULL,
-    TF_family_i int(11) NOT NULL,
-    tf_TF_family_i int(11) NOT NULL,
-    tf_gene_i int(11) NOT NULL,
-    CONSTRAINT tf_set_pk PRIMARY KEY (TF_dbi)
-) ENGINE MyISAM CHARACTER SET latin1;
-
-CREATE INDEX fk_TF_set_TF1 ON tf_set (TF_dbi);
-
--- Table: transcript_atg
-CREATE TABLE transcript_atg (
-    atg_id varchar(60) NOT NULL,
-    transcript_i int(11) NOT NULL,
-    description varchar(255) NULL DEFAULT NULL,
-    transcript_info_transcript_i int(11) NOT NULL,
-    CONSTRAINT transcript_atg_pk PRIMARY KEY (transcript_i)
-) ENGINE MyISAM CHARACTER SET latin1;
-
-CREATE INDEX transcript_i ON transcript_atg (transcript_i);
-
-CREATE INDEX atg_id ON transcript_atg (atg_id);
-
--- Table: transcript_info
-CREATE TABLE transcript_info (
-    transcript_id varchar(60) NOT NULL DEFAULT '',
-    gene_id int(11) NOT NULL,
-    description varchar(255) NULL DEFAULT '',
-    chromosome_name varchar(16) NOT NULL,
-    strand varchar(2) NOT NULL,
-    gene_start int(11) NOT NULL,
-    gene_end int(11) NOT NULL,
-    pac_id varchar(60) NULL DEFAULT NULL,
-    peptide_name varchar(60) NULL DEFAULT NULL,
-    transcript_start int(16) NOT NULL,
-    transcript_end int(16) NOT NULL,
-    transcript_i int(11) NOT NULL AUTO_INCREMENT,
-    gene_info_gene_i int(11) NOT NULL,
-    CONSTRAINT transcript_info_pk PRIMARY KEY (transcript_i)
-) ENGINE MyISAM CHARACTER SET latin1;
-
--- foreign keys
--- Reference: correlation_datasetX_clr_gene_info (table: correlation_datasetX_clr)
-ALTER TABLE correlation_datasetX_clr ADD CONSTRAINT correlation_datasetX_clr_gene_info FOREIGN KEY correlation_datasetX_clr_gene_info (gene_info_gene_i)
-    REFERENCES gene_info (gene_i);
-
--- Reference: correlation_datasetX_pear_gene_info (table: correlation_datasetX_pear)
-ALTER TABLE correlation_datasetX_pear ADD CONSTRAINT correlation_datasetX_pear_gene_info FOREIGN KEY correlation_datasetX_pear_gene_info (gene_info_gene_i)
-    REFERENCES gene_info (gene_i);
-
--- Reference: expression_datasetX_gene_info (table: expression_datasetX)
-ALTER TABLE expression_datasetX ADD CONSTRAINT expression_datasetX_gene_info FOREIGN KEY expression_datasetX_gene_info (gene_info_gene_i)
-    REFERENCES gene_info (gene_i);
-
--- Reference: expression_datasetX_sample_datasetX (table: expression_datasetX)
-ALTER TABLE expression_datasetX ADD CONSTRAINT expression_datasetX_sample_datasetX FOREIGN KEY expression_datasetX_sample_datasetX (sample_datasetX_sample_i)
-    REFERENCES sample_datasetX (sample_i);
-
--- Reference: gene_go_gene_info (table: gene_go)
-ALTER TABLE gene_go ADD CONSTRAINT gene_go_gene_info FOREIGN KEY gene_go_gene_info (gene_info_gene_i)
-    REFERENCES gene_info (gene_i);
-
--- Reference: gene_go_go_info (table: gene_go)
-ALTER TABLE gene_go ADD CONSTRAINT gene_go_go_info FOREIGN KEY gene_go_go_info (go_info_go_i)
-    REFERENCES go_info (go_i);
-
--- Reference: go_relation_gene_go (table: go_relation)
-ALTER TABLE go_relation ADD CONSTRAINT go_relation_gene_go FOREIGN KEY go_relation_gene_go (gene_go_go_i,gene_go_gene_i)
-    REFERENCES gene_go (go_i,gene_i);
-
--- Reference: pfam_table_gene_info (table: pfam_table)
-ALTER TABLE pfam_table ADD CONSTRAINT pfam_table_gene_info FOREIGN KEY pfam_table_gene_info (gene_info_gene_i)
-    REFERENCES gene_info (gene_i);
-
--- Reference: sample_datasetX_experiment_datasetX (table: sample_datasetX)
-ALTER TABLE sample_datasetX ADD CONSTRAINT sample_datasetX_experiment_datasetX FOREIGN KEY sample_datasetX_experiment_datasetX (experiment_datasetX_exp_i)
-    REFERENCES experiment_datasetX (exp_i);
-
--- Reference: tf_family_tf (table: tf_family)
-ALTER TABLE tf_family ADD CONSTRAINT tf_family_tf FOREIGN KEY tf_family_tf (tf_TF_family_i,tf_gene_i)
-    REFERENCES tf (TF_family_i,gene_i);
-
--- Reference: tf_gene_info (table: tf)
-ALTER TABLE tf ADD CONSTRAINT tf_gene_info FOREIGN KEY tf_gene_info (gene_info_gene_i)
-    REFERENCES gene_info (gene_i);
-
--- Reference: tf_set_tf (table: tf_set)
-ALTER TABLE tf_set ADD CONSTRAINT tf_set_tf FOREIGN KEY tf_set_tf (tf_TF_family_i,tf_gene_i)
-    REFERENCES tf (TF_family_i,gene_i);
-
--- Reference: transcript_atg_transcript_info (table: transcript_atg)
-ALTER TABLE transcript_atg ADD CONSTRAINT transcript_atg_transcript_info FOREIGN KEY transcript_atg_transcript_info (transcript_info_transcript_i)
-    REFERENCES transcript_info (transcript_i);
-
--- Reference: transcript_info_gene_info (table: transcript_info)
-ALTER TABLE transcript_info ADD CONSTRAINT transcript_info_gene_info FOREIGN KEY transcript_info_gene_info (gene_info_gene_i)
-    REFERENCES gene_info (gene_i);
 
 -- End of file.
 
