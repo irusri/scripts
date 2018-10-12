@@ -40,7 +40,7 @@ RUN mkdir -p /root/.ssh && touch /root/.ssh/authorized_keys && chmod 700 /root/.
 #ADD id_rsa.pub /root/.ssh/authorized_keys
 
 
-ADD genie /var/www/html/
+#ADD genie /var/www/html/
 ADD supervisord.conf /etc/
 EXPOSE 22 80 443
 
