@@ -1,4 +1,4 @@
-UPDATE correlation_preformed_clr T
+UPDATE network_table T
    SET T.gene_i1 = 
      (SELECT gene_i
      FROM gene_info A
