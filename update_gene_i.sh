@@ -2,8 +2,11 @@
 #update_gene_i.sh
 
 #USAGE: sh update_gene_i.sh
+DB_USER='root' #'your_db_username'
+DB_PASS='root' #'your_password'
+DB='my_genie_sys_database' #'database_name'
 
-/usr/bin/mysql --defaults-file="$(dirname "$0")"/.mysql.cnf --local_infile=1  <<EOFMYSQL
+mysql --host=localhost --user=$DB_USER --password=$DB_PASS --local_infile=1 --database=$DB   <<EOFMYSQL
 create temporary table add_gene_i(gene_i MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, genename VARCHAR(40));
 ALTER TABLE add_gene_i AUTO_INCREMENT = 1;
 INSERT INTO add_gene_i(genename) select DISTINCT(gene_id) from transcript_info;
