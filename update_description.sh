@@ -1,5 +1,5 @@
 #!/bin/bash
-#update_descriptions.sh
+#update_description.sh
 
 DB_USER='root' #'your_db_username'
 DB_PASS='root' #'your_password'
@@ -18,7 +18,7 @@ DB='my_genie_sys_database' #'database_name'
 
 table_name=$(echo $1 | awk '{split($0,a,"_");print a[1]}');
 tmp_field_name=$table_name"_id"
-/usr/bin/mysql --host=localhost --user=$DB_USER --password=$DB_PASS --local_infile=1 --database=$DB <<EOFMYSQL
+mysql --host=localhost --user=$DB_USER --password=$DB_PASS --local_infile=1 --database=$DB <<EOFMYSQL
 DROP TEMPORARY TABLE  IF EXISTS tmp_tb ;
 UPDATE $1 SET description = '';
 CREATE TEMPORARY TABLE tmp_tb(gene_name VARCHAR(255),annotation VARCHAR(500), PRIMARY KEY(gene_name));
