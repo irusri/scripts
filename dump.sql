@@ -198,6 +198,7 @@ CREATE TABLE `transcript_info` (
   PRIMARY KEY (`transcript_i`,`transcript_id`),
   INDEX `gene_i` (`gene_i`),	
   INDEX `gene_id` (`gene_id`)
+  INDEX `gene_id` (`transcript_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=1;
 
 -- ----------------------------
