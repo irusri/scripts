@@ -77,6 +77,19 @@ CREATE TABLE `gene_go` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
+--  Table structure for `transcript_go`
+-- ----------------------------
+DROP TABLE IF EXISTS `transcript_go`;
+CREATE TABLE `transcript_go` (
+  `transcript_id` varchar(255) NOT NULL,
+  `go_description` varchar(1000) NOT NULL DEFAULT '',
+  `go_id` varchar(255) NOT NULL DEFAULT '',
+  `transcript_i` mediumint(20) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`transcript_i`,`transcript_id`),
+  KEY `go_id` (`go_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+-- ----------------------------
 --  Table structure for `gene_info`
 -- ----------------------------
 DROP TABLE IF EXISTS `gene_info`;
